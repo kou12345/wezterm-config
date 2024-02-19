@@ -16,5 +16,7 @@ config.window_background_opacity = 0.9
 config.font = wezterm.font("HackGen", {weight="Regular", stretch="Normal", style="Normal"})
 -- キーバインドの設定
 config.keys = keybinds
+-- backslashを入力するための設定 
+config.send_composed_key_when_left_alt_is_pressed = true
 
 return config
