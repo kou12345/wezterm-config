@@ -43,6 +43,26 @@ local keybinds = {
         mods = 'CMD',
         action = wezterm.action{CloseCurrentPane = {confirm = true}},
     },
+    -- backslashを打つための設定
+    {
+        key = '¥',
+        mods = 'OPT',
+        action = wezterm.action.SendString '\\',
+    },
+    -- https://wezfurlong.org/wezterm/config/lua/keyassignment/SendKey.html
+    -- 単語間移動
+    {
+        key = 'LeftArrow',
+        mods = 'OPT',
+        action = wezterm.action.SendKey {
+          key = 'b',
+          mods = 'ALT',
+        },
+      },
+      {
+        key = 'RightArrow',
+        mods = 'OPT',
+        action = wezterm.action.SendKey { key = 'f', mods = 'ALT' },
+      },
 }
-
 return keybinds
