@@ -9,8 +9,8 @@ if wezterm.config_builder then
 end
 
 -- カラースキームの設定
--- config.color_scheme = 'Catppuccin Mocha'
-config.color_scheme = 'Black Metal (Dark Funeral) (base16)'
+config.color_scheme = 'nord'
+-- config.color_scheme = 'Black Metal (Dark Funeral) (base16)'
 -- 背景透過
 config.window_background_opacity = 1
 -- フォントの設定
