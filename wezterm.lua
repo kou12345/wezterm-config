@@ -1,78 +1,78 @@
+-- WezTermモジュールの読み込み
 local wezterm = require("wezterm")
+-- キーバインド設定を別ファイルから読み込み
 local keybinds = require("keybinds")
 
+-- 設定オブジェクトの初期化
 local config = {}
 
--- help provide clearer error messages
+-- エラーメッセージをより明確にするためのヘルパー関数
+-- 新しいバージョンのWezTermではconfig_builderを使用
 if wezterm.config_builder then
   config = wezterm.config_builder()
 end
 
--- 任意の画像path
-config.window_background_image = ""
-config.window_background_image_hsb = {
-  -- Darken the background image by reducing it to 1/3rd
-  brightness = 0.3,
+-- ===== 見た目の設定 =====
+-- カラースキームの設定（Nord テーマを使用）
+config.color_scheme = 'nord'
 
-  -- You can adjust the hue by scaling its value.
-  -- a multiplier of 1.0 leaves the value unchanged.
-  hue = 1.0,
+-- macOSでの背景ぼかし効果の強さ
+config.macos_window_background_blur = 80
 
-  -- You can adjust the saturation also.
-  saturation = 1.0,
-}
-
--- カラースキームの設定
--- config.color_scheme = 'nord'
--- config.color_scheme = 'Black Metal (Dark Funeral) (base16)'
--- 背景透過
-config.window_background_opacity = 0.70
--- ぼかしの設定
-config.macos_window_background_blur = 20
--- フォントの設定
-config.font = wezterm.font("HackGen", {weight="Regular", stretch="Normal", style="Normal"})
--- キーバインドの設定
-config.keys = keybinds
-
--- タブの設定
-config.window_decorations = "RESIZE"
-config.window_frame = {
-  inactive_titlebar_bg = "none",
-  active_titlebar_bg = "none",
-}
-
-config.show_new_tab_button_in_tab_bar = false
-config.colors = {
-  tab_bar = {
-    inactive_tab_edge = "none",
+-- ===== 背景レイヤーの設定 =====
+config.background = {
+  -- 背景画像レイヤー 
+    {
+    source = {
+      File = "/Users/koichiro-hira/.config/wezterm/gengar-wallpaper.jpg"
+    },
+    -- 画像レイヤーの透明度 (元の設定に近い値)
+    opacity = 0.7,
+    -- 必要に応じて画像の配置やサイズ調整オプションを追加できます
+    -- 例: 画像をウィンドウに合わせて引き伸ばす場合
+    width = "Cover",
+    height = "Cover",
+  },
+  -- グラデーションレイヤー
+  {
+    source = {
+      Gradient = {
+        colors = { "#1B093F", "#080710" },
+        -- orientation でグラデーションの方向を指定
+        orientation = {
+          Linear = { angle = 45.0 }, -- 線形グラデーション (角度はお好みで)
+        },
+      },
+    },
+    opacity = 0.6, -- グラデーション自体は不透明にしておくことが多い
+    width = "100%", -- ウィンドウ幅全体に広げる
+    height = "100%", -- ウィンドウ高全体に広げる
   },
 }
 
-local SOLID_LEFT_ARROW = wezterm.nerdfonts.ple_lower_right_triangle
-local SOLID_RIGHT_ARROW = wezterm.nerdfonts.ple_upper_left_triangle
 
-wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
-local background = "#5c6d74"
-local foreground = "#FFFFFF"
-  local edge_background = "none"
-if tab.is_active then
-  background = "#ae8b2d"
-  foreground = "#FFFFFF"
-end
-  local edge_foreground = background
-local title = "   " .. wezterm.truncate_right(tab.active_pane.title, max_width - 1) .. "   "
-return {
-    { Background = { Color = edge_background } },
-    { Foreground = { Color = edge_foreground } },
-    { Text = SOLID_LEFT_ARROW },
-   { Background = { Color = background } },
-   { Foreground = { Color = foreground } },
-  { Text = title },
-    { Background = { Color = edge_background } },
-    { Foreground = { Color = edge_foreground } },
-    { Text = SOLID_RIGHT_ARROW },
-}
-end)
+-- ===== フォント設定 =====
+-- 日本語対応フォント「HackGen」を使用
+config.font = wezterm.font("HackGen", {weight="Regular", stretch="Normal", style="Normal"})
+-- フォントサイズを14ポイントに設定
+config.font_size = 14.0
 
+-- ===== キーボード設定 =====
+-- キーバインドを別ファイル（keybinds.lua）から読み込み
+config.keys = keybinds
+
+-- ===== ウィンドウ設定 =====
+-- ウィンドウの装飾設定
+config.window_decorations = "RESIZE"
+
+-- ===== タブ設定 =====
+-- タブバーを有効化
+config.enable_tab_bar = true
+-- タブが1つしかない場合はタブバーを非表示
+config.hide_tab_bar_if_only_one_tab = true
+
+-- ===== macOS固有の設定 =====
+-- macOSネイティブのフルスクリーンモードを使用
+config.native_macos_fullscreen_mode = true
 
 return config
